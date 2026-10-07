@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <h1>Beat the ATS. <span class="grad">Land the interview.</span></h1>
+  <p>Upload your resume and a job description. Get an ATS compatibility score, skill-gap analysis and personalised fixes in seconds.</p>
+  <div class="cta">
+    {% if current_user.is_authenticated %}
+      <a class="btn big" href="{{ url_for('analyze_page') }}">Analyze a Resume</a>
+    {% else %}
+      <a class="btn big" href="{{ url_for('register') }}">Get Started Free</a>
+      <a class="btn-outline big" href="{{ url_for('login') }}">Login</a>
+    {% endif %}
+  </div>
+</section>
+<section class="grid3">
+  <div class="card"><h3>&#128196; ATS Score</h3><p>A TensorFlow model scores your resume from 0&ndash;100 using skills, keywords, structure and impact language.</p></div>
+  <div class="card"><h3>&#129504; NLP Skill Gap</h3><p>Extracts skills and keywords from the job post and shows exactly what your resume is missing.</p></div>
+  <div class="card"><h3>&#128161; Smart Tips</h3><p>Personalised, recruiter-focused recommendations, plus a history dashboard to track improvement.</p></div>
+</section>
+{% endblock %}

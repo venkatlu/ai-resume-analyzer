@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Result{% endblock %}
+{% block content %}
+<div class="row-between">
+  <div><h2>{{ a.job.title }}</h2><p class="muted">{{ a.resume.filename }} &middot; {{ a.created_at.strftime('%d %b %Y, %H:%M') }}</p></div>
+  <div>
+    <a class="btn-outline" href="{{ url_for('report', analysis_id=a.id) }}">Download report</a>
+    <a class="btn" href="{{ url_for('analyze_page') }}">Analyze another</a>
+  </div>
+</div>
+
+<div class="grid2">
+  <div class="card center">
+    <div class="gauge" style="--p: {{ r.ats_score }}; --c: {{ '#22c55e' if r.ats_score >= 65 else '#f59e0b' if r.ats_score >= 50 else '#ef4444' }}">
+      <div class="gauge-inner"><b>{{ r.ats_score }}</b><small>/ 100</small></div>
+    </div>
+    <h3>{{ r.label }}</h3>
+    <p class="muted">Scored by: {{ r.engine }}</p>
+  </div>
+  <div class="card">
+    <h3>Score breakdown</h3>
+    {% for name, val in r.features.items() %}
+    <div class="bar-row"><span>{{ name.replace('_', ' ').title() }}</span>
+      <div class="bar"><div style="width: {{ val }}%"></div></div><em>{{ val|round|int }}%</em></div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="grid2">
+  <div class="card"><h3>&#9989; Matched skills ({{ r.matched_skills|length }})</h3>
+    {% for s in r.matched_skills %}<span class="chip ok">{{ s }}</span>{% else %}<p class="muted">None found.</p>{% endfor %}</div>
+  <div class="card"><h3>&#10060; Missing skills ({{ r.missing_skills|length }})</h3>
+    {% for s in r.missing_skills %}<span class="chip miss">{{ s }}</span>{% else %}<p class="muted">Nothing missing. Nice!</p>{% endfor %}</div>
+</div>
+
+<div class="grid2">
+  <div class="card"><h3>Keywords found</h3>
+    {% for s in r.keywords_matched %}<span class="chip ok">{{ s }}</span>{% else %}<p class="muted">-</p>{% endfor %}</div>
+  <div class="card"><h3>Keywords to add</h3>
+    {% for s in r.keywords_missing %}<span class="chip miss">{{ s }}</span>{% else %}<p class="muted">-</p>{% endfor %}</div>
+</div>
+
+<div class="card"><h3>&#128161; Recommendations</h3>
+  <ol class="tips">{% for t in r.suggestions %}<li>{{ t }}</li>{% endfor %}</ol></div>
+
+<div class="grid2">
+  <div class="card"><h3>Resume sections</h3>
+    {% for name, ok in r.sections.items() %}<span class="chip {{ 'ok' if ok else 'miss' }}">{{ '✓' if ok else '✗' }} {{ name|title }}</span>{% endfor %}
+    <h3 class="mt">Contact info</h3>
+    {% for name, ok in r.contact.items() %}<span class="chip {{ 'ok' if ok else 'miss' }}">{{ '✓' if ok else '✗' }} {{ name|title }}</span>{% endfor %}</div>
+  <div class="card"><h3>Stats</h3>
+    <ul class="plain">
+      <li>Words: <b>{{ r.stats.words }}</b></li>
+      <li>Action verbs: <b>{{ r.stats.action_verbs }}</b></li>
+      <li>Quantified results: <b>{{ r.stats.quantified_results }}</b></li>
+      <li>Text similarity to job: <b>{{ r.stats.similarity_pct }}%</b></li>
+      <li>Job skills detected: <b>{{ r.stats.jd_skills }}</b> &middot; Your skills detected: <b>{{ r.stats.resume_skills }}</b></li>
+    </ul></div>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="row-between">
+  <h2>Hi {{ current_user.name.split()[0] }} &#128075;</h2>
+  <a class="btn" href="{{ url_for('analyze_page') }}">+ New Analysis</a>
+</div>
+<div class="grid3">
+  <div class="card stat"><span>{{ stats.count }}</span>Analyses</div>
+  <div class="card stat"><span>{{ stats.avg }}</span>Average score</div>
+  <div class="card stat"><span>{{ stats.best }}</span>Best score</div>
+</div>
+{% if chart %}
+<div class="card"><h3>Score trend</h3><canvas id="trend" height="90"></canvas></div>
+{% endif %}
+<div class="card">
+  <h3>Analysis history</h3>
+  {% if items %}
+  <table>
+    <thead><tr><th>Date</th><th>Role</th><th>Resume</th><th>Score</th><th></th></tr></thead>
+    <tbody>
+    {% for a in items %}
+      <tr>
+        <td>{{ a.created_at.strftime('%d %b %Y, %H:%M') }}</td>
+        <td>{{ a.job.title }}</td>
+        <td>{{ a.resume.filename }}</td>
+        <td><span class="pill {{ 'good' if a.ats_score >= 65 else 'mid' if a.ats_score >= 50 else 'bad' }}">{{ a.ats_score }}</span></td>
+        <td class="actions">
+          <a href="{{ url_for('result', analysis_id=a.id) }}">View</a>
+          <form method="post" action="{{ url_for('delete', analysis_id=a.id) }}" onsubmit="return confirm('Delete this analysis?')">
+            <button class="link-danger">Delete</button></form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}<p class="muted">No analyses yet. Run your first one!</p>{% endif %}
+</div>
+{% endblock %}
+{% block scripts %}
+{% if chart %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+  const data = {{ chart | tojson }};
+  new Chart(document.getElementById('trend'), {
+    type: 'line',
+    data: { labels: data.map(d => d.label),
+            datasets: [{ label: 'ATS score', data: data.map(d => d.score), borderColor: '#6366f1',
+                         backgroundColor: 'rgba(99,102,241,.15)', fill: true, tension: .35 }] },
+    options: { scales: { y: { min: 0, max: 100 } } }
+  });
+</script>
+{% endif %}
+{% endblock %}

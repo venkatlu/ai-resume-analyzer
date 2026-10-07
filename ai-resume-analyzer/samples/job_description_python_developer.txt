@@ -1,0 +1,17 @@
+Python Developer (Entry Level / Remote)
+
+We are looking for a Python Developer to build and maintain web applications and APIs.
+
+Responsibilities
+- Develop backend services using Python, Flask or Django and design RESTful APIs.
+- Work with MySQL and MongoDB databases, write optimized SQL queries.
+- Build responsive front-end pages using HTML, CSS, JavaScript and React.
+- Apply machine learning and NLP techniques using TensorFlow, scikit-learn and pandas.
+- Use Git and GitHub for version control, and Docker for deployment.
+- Write unit tests with pytest and debug production issues.
+- Collaborate in an Agile team, communicate clearly and solve problems independently.
+
+Requirements
+- B.Tech in Computer Science or related field.
+- Strong knowledge of data structures and algorithms, OOP and REST APIs.
+- Experience with AWS or Azure is a plus. Knowledge of CI/CD and Linux is preferred.

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}New Analysis{% endblock %}
+{% block content %}
+<div class="card">
+  <h2>Analyze your resume</h2>
+  <form method="post" enctype="multipart/form-data" id="analyze-form">
+    <label>Job title (optional)</label>
+    <input name="job_title" placeholder="e.g. Python Developer">
+
+    <label>Resume (PDF, max 5 MB) *</label>
+    <input type="file" name="resume" accept=".pdf" required>
+
+    <label>Job description &mdash; paste text</label>
+    <textarea name="jd_text" rows="9" placeholder="Paste the full job description here..."></textarea>
+
+    <label>...or upload it (PDF / TXT)</label>
+    <input type="file" name="jd_file" accept=".pdf,.txt">
+
+    <button class="btn full" id="submit-btn">Analyze Resume</button>
+  </form>
+  <p class="muted">The first analysis may take ~15 s while TensorFlow loads and trains the scoring model.</p>
+</div>
+{% endblock %}
